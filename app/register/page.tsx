@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import { useRouter } from 'next/navigation'
-import React, {useState} from 'react'
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
 const page = () => {
-
-  const[email, setEmail] = useState("")
-  const[password, setPassword] = useState("")
-  const[confirmPassword, setConfirmPassword] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const router = useRouter();
 
@@ -18,6 +18,9 @@ const page = () => {
       return;
     }
     try {
+      //Debouncing
+      //react-query
+      //loading,error
       const res = await fetch("api/auth/register", {
         method: "POST",
         headers: {
@@ -26,33 +29,55 @@ const page = () => {
         body: JSON.stringify({
           email,
           password,
-        })
-      })
-      const data = await res.json()
+        }),
+      });
+      const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || "Registration Failed")
+        throw new Error(data.error || "Registration Failed");
       }
       console.log(data);
-      router.push("/login")
-      
+      router.push("/login");
     } catch (error) {
       console.log(error);
-
     }
-  }
+  };
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <input className='outline-none' type="email" placeholder='Enter Email' value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder='Enter Password' value={password} onChange={(e) => setPassword(e.target.value)} />
-        <input type="password" placeholder='Confirm Password' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
-        <button type='submit'>Register</button>
+        <input
+          className="outline-none"
+          type="email"
+          placeholder="Enter Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          className="outline-none"
+          type="password"
+          placeholder="Enter Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
+        <button type="submit">Register</button>
       </form>
-
+      <div>
+        <p>
+          Already have an Account?{" "}
+          <Link href="/login" className="text-blue-500">
+            Login
+          </Link>
+        </p>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;
